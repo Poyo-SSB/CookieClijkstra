@@ -1,0 +1,22 @@
+﻿using System;
+
+namespace CookieClijkstra
+{
+    public class Vertex
+    {
+        public FibonacciHeapNode<Vertex, double> Node { get; set; }
+        public State State { get; set; }
+        public double DistanceFromSource { get; set; } = Double.PositiveInfinity;
+
+        public Vertex Previous { get; set; }
+        public string PreviousName { get; set; }
+
+        public Vertex(FibonacciHeapNode<Vertex, double> node = null, State state = default(State))
+        {
+            this.Node = node;
+            this.State = state;
+        }
+
+        public override string ToString() => $"{this.PreviousName} => {this.DistanceFromSource:N2}";
+    }
+}
