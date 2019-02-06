@@ -4,14 +4,14 @@ namespace CookieClijkstra
 {
     public class Vertex
     {
-        public FibonacciHeapNode<Vertex, float> Node { get; set; }
+        public FibonacciHeapNode Node { get; set; }
         public State State { get; set; }
         public float DistanceFromSource { get; set; } = Single.PositiveInfinity;
 
         public Vertex Previous { get; set; }
         public string PreviousName { get; set; }
 
-        public Vertex(FibonacciHeapNode<Vertex, float> node = null, State state = default(State))
+        public Vertex(FibonacciHeapNode node = null, State state = default(State))
         {
             this.Node = node;
             this.State = state;

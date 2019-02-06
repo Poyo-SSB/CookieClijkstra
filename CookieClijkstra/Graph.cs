@@ -24,7 +24,7 @@ namespace CookieClijkstra
 
         private readonly Dictionary<State, Vertex> vertices;
 
-        private readonly FibonacciHeap<Vertex, float> queue;
+        private readonly FibonacciHeap queue;
 
         public bool Solved { get; private set; }
         public int StepCount { get; private set; }
@@ -33,7 +33,7 @@ namespace CookieClijkstra
         {
             this.TargetCookies = targetCookies;
 
-            this.queue = new FibonacciHeap<Vertex, float>(0);
+            this.queue = new FibonacciHeap();
 
             this.target = new Vertex
             {

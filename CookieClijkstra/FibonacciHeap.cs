@@ -3,17 +3,13 @@ using System.Collections.Generic;
 
 namespace CookieClijkstra
 {
-    public class FibonacciHeap<T, TKey> where TKey : IComparable<TKey>
+    public class FibonacciHeap
     {
         private static readonly float one_over_log_phi = 1 / (float)Math.Log((1 + Math.Sqrt(5)) / 2);
 
-        private readonly TKey minimumKeyValue;
-
         public bool IsEmpty => this.Root == null;
         public int Size { get; private set; }
-        public FibonacciHeapNode<T, TKey> Root { get; private set; }
-
-        public FibonacciHeap(TKey minKeyValue) => this.minimumKeyValue = minKeyValue;
+        public FibonacciHeapNode Root { get; private set; }
 
         public void Clear()
         {
@@ -21,7 +17,7 @@ namespace CookieClijkstra
             this.Size = 0;
         }
 
-        public void DecreaseKey(FibonacciHeapNode<T, TKey> node, TKey key)
+        public void DecreaseKey(FibonacciHeapNode node, float key)
         {
             if (key.CompareTo(node.Key) > 0)
             {
@@ -30,7 +26,7 @@ namespace CookieClijkstra
 
             node.Key = key;
 
-            FibonacciHeapNode<T, TKey> y = node.Parent;
+            FibonacciHeapNode y = node.Parent;
 
             if ((y != null) && (node.Key.CompareTo(y.Key) < 0))
             {
@@ -44,15 +40,9 @@ namespace CookieClijkstra
             }
         }
 
-        public void Delete(FibonacciHeapNode<T, TKey> node)
+        public FibonacciHeapNode Insert(Vertex data, float key)
         {
-            this.DecreaseKey(node, this.minimumKeyValue);
-            this.Pop();
-        }
-
-        public FibonacciHeapNode<T, TKey> Insert(T data, TKey key)
-        {
-            var node = new FibonacciHeapNode<T, TKey>(data, key);
+            var node = new FibonacciHeapNode(data, key);
 
             if (this.Root != null)
             {
@@ -76,18 +66,18 @@ namespace CookieClijkstra
             return node;
         }
 
-        public FibonacciHeapNode<T, TKey> Pop()
+        public FibonacciHeapNode Pop()
         {
-            FibonacciHeapNode<T, TKey> minNode = this.Root;
+            FibonacciHeapNode minNode = this.Root;
 
             if (minNode != null)
             {
                 int numKids = minNode.Degree;
-                FibonacciHeapNode<T, TKey> oldMinChild = minNode.Child;
+                FibonacciHeapNode oldMinChild = minNode.Child;
 
                 while (numKids > 0)
                 {
-                    FibonacciHeapNode<T, TKey> tempRight = oldMinChild.Right;
+                    FibonacciHeapNode tempRight = oldMinChild.Right;
 
                     oldMinChild.Left.Right = oldMinChild.Right;
                     oldMinChild.Right.Left = oldMinChild.Left;
@@ -121,9 +111,9 @@ namespace CookieClijkstra
             return minNode;
         }
 
-        protected void CascadingCut(FibonacciHeapNode<T, TKey> y)
+        protected void CascadingCut(FibonacciHeapNode y)
         {
-            FibonacciHeapNode<T, TKey> z = y.Parent;
+            FibonacciHeapNode z = y.Parent;
 
             if (z != null)
             {
@@ -144,7 +134,7 @@ namespace CookieClijkstra
         {
             int arraySize = ((int)Math.Floor(Math.Log(this.Size) * one_over_log_phi)) + 1;
 
-            var array = new List<FibonacciHeapNode<T, TKey>>(arraySize);
+            var array = new List<FibonacciHeapNode>(arraySize);
 
             for (int i = 0; i < arraySize; i++)
             {
@@ -152,7 +142,7 @@ namespace CookieClijkstra
             }
 
             int numRoots = 0;
-            FibonacciHeapNode<T, TKey> x = this.Root;
+            FibonacciHeapNode x = this.Root;
 
             if (x != null)
             {
@@ -169,11 +159,11 @@ namespace CookieClijkstra
             while (numRoots > 0)
             {
                 int d = x.Degree;
-                FibonacciHeapNode<T, TKey> next = x.Right;
+                FibonacciHeapNode next = x.Right;
 
                 while (true)
                 {
-                    FibonacciHeapNode<T, TKey> y = array[d];
+                    FibonacciHeapNode y = array[d];
                     if (y == null)
                     {
                         break;
@@ -181,7 +171,7 @@ namespace CookieClijkstra
 
                     if (x.Key.CompareTo(y.Key) > 0)
                     {
-                        FibonacciHeapNode<T, TKey> temp = y;
+                        FibonacciHeapNode temp = y;
                         y = x;
                         x = temp;
                     }
@@ -202,7 +192,7 @@ namespace CookieClijkstra
 
             for (int i = 0; i < arraySize; i++)
             {
-                FibonacciHeapNode<T, TKey> y = array[i];
+                FibonacciHeapNode y = array[i];
                 if (y == null)
                 {
                     continue;
@@ -230,7 +220,7 @@ namespace CookieClijkstra
             }
         }
 
-        protected void Cut(FibonacciHeapNode<T, TKey> x, FibonacciHeapNode<T, TKey> y)
+        protected void Cut(FibonacciHeapNode x, FibonacciHeapNode y)
         {
             x.Left.Right = x.Right;
             x.Right.Left = x.Left;
@@ -256,7 +246,7 @@ namespace CookieClijkstra
             x.Marked = false;
         }
 
-        protected void Link(FibonacciHeapNode<T, TKey> newChild, FibonacciHeapNode<T, TKey> newParent)
+        protected void Link(FibonacciHeapNode newChild, FibonacciHeapNode newParent)
         {
             newChild.Left.Right = newChild.Right;
             newChild.Right.Left = newChild.Left;
@@ -283,9 +273,9 @@ namespace CookieClijkstra
         }
     }
 
-    public class FibonacciHeapNode<T, TKey> where TKey : IComparable<TKey>
+    public class FibonacciHeapNode
     {
-        public FibonacciHeapNode(T data, TKey key)
+        public FibonacciHeapNode(Vertex data, float key)
         {
             this.Right = this;
             this.Left = this;
@@ -293,16 +283,16 @@ namespace CookieClijkstra
             this.Key = key;
         }
 
-        public T Data { get; set; }
+        public Vertex Data { get; set; }
 
-        public FibonacciHeapNode<T, TKey> Child { get; set; }
-        public FibonacciHeapNode<T, TKey> Left { get; set; }
-        public FibonacciHeapNode<T, TKey> Parent { get; set; }
-        public FibonacciHeapNode<T, TKey> Right { get; set; }
+        public FibonacciHeapNode Child { get; set; }
+        public FibonacciHeapNode Left { get; set; }
+        public FibonacciHeapNode Parent { get; set; }
+        public FibonacciHeapNode Right { get; set; }
 
         public bool Marked { get; set; }
 
-        public TKey Key { get; set; }
+        public float Key { get; set; }
 
         public int Degree { get; set; }
     }
