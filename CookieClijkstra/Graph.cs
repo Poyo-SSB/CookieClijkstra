@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CookieClijkstra
 {
@@ -21,8 +20,7 @@ namespace CookieClijkstra
 
         public int TargetCookies { get; }
 
-        public Vertex Source { get; }
-        public Vertex Target { get; }
+        public readonly Vertex target;
 
         private readonly Dictionary<State, Vertex> vertices;
 
@@ -37,14 +35,17 @@ namespace CookieClijkstra
 
             this.queue = new FibonacciHeap<Vertex, double>(0);
 
-            this.Source = new Vertex();
-            this.Target = new Vertex();
+            this.target = new Vertex
+            {
+                PreviousName = "target"
+            };
 
-            this.Source.DistanceFromSource = 0;
-            this.Target.PreviousName = "target";
+            var source = new Vertex
+            {
+                DistanceFromSource = 0
+            };
 
-            this.Source.Node = this.queue.Insert(this.Source, 0);
-
+            source.Node = this.queue.Insert(source, 0);
             this.vertices = new Dictionary<State, Vertex>();
         }
 
@@ -161,7 +162,7 @@ namespace CookieClijkstra
                 yield return new Path(to, possibility.Cost / cps, possibility.Name);
             }
 
-            yield return new Path(this.Target, (this.TargetCookies - state.CookiesAlreadySpent) / cps, "target");
+            yield return new Path(this.target, (this.TargetCookies - state.CookiesAlreadySpent) / cps, "target");
         }
 
         public void Step()
@@ -176,7 +177,7 @@ namespace CookieClijkstra
 
             var current = this.queue.Pop();
 
-            if (current.Data == this.Target)
+            if (current.Data == this.target)
             {
                 this.Solved = true;
                 return;
@@ -206,7 +207,7 @@ namespace CookieClijkstra
         {
             var path = new List<Vertex>();
 
-            Vertex current = this.Target;
+            Vertex current = this.target;
 
             while (current != null)
             {
