@@ -268,27 +268,26 @@ namespace CookieClijkstra
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            State other;
-
-            if (!(obj is State))
-            {
-                return false;
-            }
-
-            other = (State)obj;
-
             return
+                obj != null &&
+                obj is State other &&
                 this.Cursors == other.Cursors &&
                 this.ReinforcedIndexFinger == other.ReinforcedIndexFinger &&
                 this.CarpalTunnelPreventionCream == other.CarpalTunnelPreventionCream &&
+                this.Ambidextrous == other.Ambidextrous &&
+                this.ThousandFingers == other.ThousandFingers &&
                 this.Grandmas == other.Grandmas &&
                 this.ForwardsFromGrandma == other.ForwardsFromGrandma &&
-                this.Farms == other.Farms;
+                this.SteelPlatedRollingPins == other.SteelPlatedRollingPins &&
+                this.LubricatedDentures == other.LubricatedDentures &&
+                this.Farms == other.Farms &&
+                this.CheapHoes == other.CheapHoes &&
+                this.Fertilizer == other.Fertilizer &&
+                this.CookieTrees == other.CookieTrees &&
+                this.Mines == other.Mines &&
+                this.SugarGas == other.SugarGas &&
+                this.Megadrill == other.Megadrill &&
+                this.Factories == other.Factories;
         }
 
         public static bool operator ==(State lhs, State rhs)
