@@ -24,7 +24,7 @@ namespace CookieClijkstra
 
         private readonly Dictionary<State, Vertex> vertices;
 
-        private readonly FibonacciHeap<Vertex, double> queue;
+        private readonly FibonacciHeap<Vertex, float> queue;
 
         public bool Solved { get; private set; }
         public int StepCount { get; private set; }
@@ -33,7 +33,7 @@ namespace CookieClijkstra
         {
             this.TargetCookies = targetCookies;
 
-            this.queue = new FibonacciHeap<Vertex, double>(0);
+            this.queue = new FibonacciHeap<Vertex, float>(0);
 
             this.target = new Vertex
             {
@@ -150,7 +150,7 @@ namespace CookieClijkstra
                     new State(state) { Megadrill = true }));
             }
 
-            double cps = state.CookiesPerSecond;
+            float cps = state.CookiesPerSecond;
             foreach (Possibility possibility in possibilities)
             {
                 if (!this.vertices.TryGetValue(possibility.State, out Vertex to))
@@ -185,7 +185,7 @@ namespace CookieClijkstra
 
             foreach (Path neighbor in this.GetNeighborsOf(current.Data))
             {
-                double alt = current.Data.DistanceFromSource + neighbor.Distance;
+                float alt = current.Data.DistanceFromSource + neighbor.Distance;
                 if (alt < neighbor.To.DistanceFromSource)
                 {
                     neighbor.To.DistanceFromSource = alt;

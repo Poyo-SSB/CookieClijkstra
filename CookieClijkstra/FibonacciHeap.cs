@@ -5,7 +5,7 @@ namespace CookieClijkstra
 {
     public class FibonacciHeap<T, TKey> where TKey : IComparable<TKey>
     {
-        private static readonly double one_over_log_phi = 1.0 / Math.Log((1.0 + Math.Sqrt(5.0)) / 2.0);
+        private static readonly float one_over_log_phi = 1 / (float)Math.Log((1 + Math.Sqrt(5)) / 2);
 
         private readonly TKey minimumKeyValue;
 
@@ -13,10 +13,7 @@ namespace CookieClijkstra
         public int Size { get; private set; }
         public FibonacciHeapNode<T, TKey> Root { get; private set; }
 
-        public FibonacciHeap(TKey minKeyValue)
-        {
-            this.minimumKeyValue = minKeyValue;
-        }
+        public FibonacciHeap(TKey minKeyValue) => this.minimumKeyValue = minKeyValue;
 
         public void Clear()
         {

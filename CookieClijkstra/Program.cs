@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace CookieClijkstra
 {
@@ -28,7 +28,7 @@ namespace CookieClijkstra
 
             Logger.Log($"Calculated in {stopwatch.Elapsed.TotalSeconds:N2}s with {graph.StepCount} steps.");
 
-            double previousDistance = 0;
+            float previousDistance = 0;
             foreach (Vertex vertex in graph.GetSolution())
             {
                 if (vertex.Previous == null)
