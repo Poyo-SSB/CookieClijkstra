@@ -55,11 +55,11 @@ namespace CookieClijkstra
 
             var possibilities = new List<Possibility>
             {
-                new Possibility("buy cursor", state.CursorCost, new State(state) { Cursors = state.Cursors + 1 }),
-                new Possibility("buy grandma", state.GrandmaCost, new State(state) { Grandmas = state.Grandmas + 1 }),
-                new Possibility("buy farm", state.FarmCost, new State(state) { Farms = state.Farms + 1 }),
-                new Possibility("buy mine", state.MineCost, new State(state) { Mines = state.Mines + 1 }),
-                new Possibility("buy factory", state.FactoryCost, new State(state) { Factories = state.Factories + 1 })
+                new Possibility("buy cursor", state.CursorCost, new State(state) { Cursors = (byte)(state.Cursors + 1) }),
+                new Possibility("buy grandma", state.GrandmaCost, new State(state) { Grandmas = (byte)(state.Grandmas + 1) }),
+                new Possibility("buy farm", state.FarmCost, new State(state) { Farms = (byte)(state.Farms + 1) }),
+                new Possibility("buy mine", state.MineCost, new State(state) { Mines = (byte)(state.Mines + 1) }),
+                new Possibility("buy factory", state.FactoryCost, new State(state) { Factories = (byte)(state.Factories + 1) })
             };
 
             if (state.ReinforcedIndexFingerAvailable)

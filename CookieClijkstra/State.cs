@@ -4,37 +4,37 @@ namespace CookieClijkstra
 {
     public struct State
     {
-        private const double cost_base = 1.15;
+        private const float cost_base = 1.15f;
 
-        private const double cps_mouse = 10;
+        private const float cps_mouse = 10;
 
-        private const double cps_cursor = 0.1;
-        private const double cps_grandma = 1;
-        private const double cps_farm = 8;
-        private const double cps_mine = 47;
-        private const double cps_factory = 260;
+        private const float cps_cursor = 0.1f;
+        private const float cps_grandma = 1;
+        private const float cps_farm = 8;
+        private const float cps_mine = 47;
+        private const float cps_factory = 260;
 
-        private const double cost_cursor = 15;
-        private const double cost_grandma = 100;
-        private const double cost_farm = 1100;
-        private const double cost_mine = 12000;
-        private const double cost_factory = 130000;
+        private const float cost_cursor = 15;
+        private const float cost_grandma = 100;
+        private const float cost_farm = 1100;
+        private const float cost_mine = 12000;
+        private const float cost_factory = 130000;
 
-        private const int gate_reinforced_index_finger = 1;
-        private const int gate_carpal_tunnel_prevention_cream = 1;
-        private const int gate_ambidextrous = 10;
-        private const int gate_thousand_fingers = 25;
+        private const byte gate_reinforced_index_finger = 1;
+        private const byte gate_carpal_tunnel_prevention_cream = 1;
+        private const byte gate_ambidextrous = 10;
+        private const byte gate_thousand_fingers = 25;
 
-        private const int gate_forwards_from_grandma = 1;
-        private const int gate_steel_plated_rolling_pins = 5;
-        private const int gate_lubricated_dentures = 25;
+        private const byte gate_forwards_from_grandma = 1;
+        private const byte gate_steel_plated_rolling_pins = 5;
+        private const byte gate_lubricated_dentures = 25;
 
-        private const int gate_cheap_hoes = 1;
-        private const int gate_fertilizer = 5;
-        private const int gate_cookie_trees = 25;
+        private const byte gate_cheap_hoes = 1;
+        private const byte gate_fertilizer = 5;
+        private const byte gate_cookie_trees = 25;
 
-        private const int gate_sugar_gas = 1;
-        private const int gate_megadrill = 5;
+        private const byte gate_sugar_gas = 1;
+        private const byte gate_megadrill = 5;
 
         public const int COST_REINFORCED_INDEX_FINGER = 100;
         public const int COST_CARPAL_TUNNEL_PREVENTION_CREAM = 500;
@@ -52,7 +52,7 @@ namespace CookieClijkstra
         public const int COST_SUGAR_GAS = 120000;
         public const int COST_MEGADRILL = 600000;
 
-        public int Cursors;
+        public byte Cursors;
         public int CursorCost => Cost(cost_cursor, this.Cursors);
 
         public bool ReinforcedIndexFinger;
@@ -64,7 +64,7 @@ namespace CookieClijkstra
         public bool ThousandFingers;
         public bool ThousandFingersAvailable => !(this.ThousandFingers || this.Cursors < gate_thousand_fingers);
 
-        public int Grandmas;
+        public byte Grandmas;
         public int GrandmaCost => Cost(cost_grandma, this.Grandmas);
 
         public bool ForwardsFromGrandma;
@@ -74,7 +74,7 @@ namespace CookieClijkstra
         public bool LubricatedDentures;
         public bool LubricatedDenturesAvailable => !(this.LubricatedDentures || this.Grandmas < gate_lubricated_dentures);
 
-        public int Farms;
+        public byte Farms;
         public int FarmCost => Cost(cost_farm, this.Farms);
 
         public bool CheapHoes;
@@ -84,7 +84,7 @@ namespace CookieClijkstra
         public bool CookieTrees;
         public bool CookieTreesAvailable => !(this.CookieTrees || this.Farms < gate_cookie_trees);
 
-        public int Mines;
+        public byte Mines;
         public int MineCost => Cost(cost_mine, this.Mines);
 
         public bool SugarGas;
@@ -92,20 +92,20 @@ namespace CookieClijkstra
         public bool Megadrill;
         public bool MegadrillAvailable => !(this.Megadrill || this.Mines < gate_megadrill);
 
-        public int Factories;
+        public byte Factories;
         public int FactoryCost => Cost(cost_factory, this.Factories);
 
-        public double CookiesPerSecond
+        public float CookiesPerSecond
         {
             get
             {
-                double mouseCps = cps_mouse;
+                float mouseCps = cps_mouse;
 
-                double cursorCps = cps_cursor * this.Cursors;
-                double grandmaCps = cps_grandma * this.Grandmas;
-                double farmCps = cps_farm * this.Farms;
-                double mineCps = cps_mine * this.Mines;
-                double factoryCps = cps_factory * this.Factories;
+                float cursorCps = cps_cursor * this.Cursors;
+                float grandmaCps = cps_grandma * this.Grandmas;
+                float farmCps = cps_farm * this.Farms;
+                float mineCps = cps_mine * this.Mines;
+                float factoryCps = cps_factory * this.Factories;
 
                 if (this.ReinforcedIndexFinger)
                 {
@@ -124,7 +124,7 @@ namespace CookieClijkstra
                 }
                 if (this.ThousandFingers)
                 {
-                    double addition = (this.Grandmas + this.Farms + this.Mines + this.Factories) * 0.1;
+                    float addition = (this.Grandmas + this.Farms + this.Mines + this.Factories) * 0.1f;
 
                     mouseCps += addition;
                     cursorCps += addition;
@@ -201,9 +201,9 @@ namespace CookieClijkstra
             }
         }
 
-        private static int Cost(double baseCost, int ownedCount) => (int)Math.Ceiling(baseCost * Math.Pow(cost_base, ownedCount));
+        private static int Cost(float baseCost, int ownedCount) => (int)Math.Ceiling(baseCost * Math.Pow(cost_base, ownedCount));
 
-        private static int Sum(double baseCost, int count)
+        private static int Sum(float baseCost, int count)
         {
             int sum = 0;
 
