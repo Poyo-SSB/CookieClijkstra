@@ -6,7 +6,7 @@ namespace CookieClijkstra
     {
         public FibonacciHeapNode Node { get; set; }
         public State State { get; set; }
-        public float DistanceFromSource { get; set; } = Single.PositiveInfinity;
+        public float MinimumCost { get; set; } = Single.PositiveInfinity;
 
         public Vertex Previous { get; set; }
         public string PreviousName { get; set; }
@@ -17,6 +17,6 @@ namespace CookieClijkstra
             this.State = state;
         }
 
-        public override string ToString() => $"{this.PreviousName} => {this.DistanceFromSource:N2}";
+        public override string ToString() => $"{this.PreviousName} => {this.MinimumCost:N2}";
     }
 }

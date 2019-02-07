@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace CookieClijkstra
 {
@@ -6,11 +6,11 @@ namespace CookieClijkstra
     {
         public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
 
-        private const int target_cookies = 1000000;
+        private const int target_ducks = 1000;
 
         public static async Task MainAsync(string[] args)
         {
-            var graph = new Graph(target_cookies);
+            var graph = new Graph(target_ducks);
 
             var stopwatch = new System.Diagnostics.Stopwatch();
 
@@ -18,17 +18,12 @@ namespace CookieClijkstra
             while (!graph.Solved)
             {
                 graph.Step();
-
-                if (graph.StepCount % 100000 == 0)
-                {
-                    Logger.Log($"Completed step {graph.StepCount:n0}.");
-                }
             }
             stopwatch.Stop();
 
             Logger.Log($"Calculated in {stopwatch.Elapsed.TotalSeconds:N2}s with {graph.StepCount} steps.");
 
-            float previousDistance = 0;
+            float previousCost = 0;
             foreach (Vertex vertex in graph.GetSolution())
             {
                 if (vertex.Previous == null)
@@ -37,8 +32,8 @@ namespace CookieClijkstra
                 }
                 else
                 {
-                    Logger.Log($"{vertex.DistanceFromSource:N2}s (+{vertex.DistanceFromSource - previousDistance:N2}s) => {vertex.PreviousName}");
-                    previousDistance = vertex.DistanceFromSource;
+                    Logger.Log($"{vertex.MinimumCost:N2}s (+{vertex.MinimumCost - previousCost:N2}s) => {vertex.PreviousName}");
+                    previousCost = vertex.MinimumCost;
                 }
             }
 

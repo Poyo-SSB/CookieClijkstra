@@ -18,7 +18,7 @@ namespace CookieClijkstra
             }
         }
 
-        public int TargetCookies { get; }
+        public int TargetDucks { get; }
 
         public readonly Vertex target;
 
@@ -29,9 +29,9 @@ namespace CookieClijkstra
         public bool Solved { get; private set; }
         public int StepCount { get; private set; }
 
-        public Graph(int targetCookies)
+        public Graph(int targetDucks)
         {
-            this.TargetCookies = targetCookies;
+            this.TargetDucks = targetDucks;
 
             this.queue = new FibonacciHeap();
 
@@ -42,7 +42,7 @@ namespace CookieClijkstra
 
             var source = new Vertex
             {
-                DistanceFromSource = 0
+                MinimumCost = 0
             };
 
             source.Node = this.queue.Insert(source, 0);
@@ -55,102 +55,26 @@ namespace CookieClijkstra
 
             var possibilities = new List<Possibility>
             {
-                new Possibility("buy cursor", state.CursorCost, new State(state) { Cursors = (byte)(state.Cursors + 1) }),
-                new Possibility("buy grandma", state.GrandmaCost, new State(state) { Grandmas = (byte)(state.Grandmas + 1) }),
-                new Possibility("buy farm", state.FarmCost, new State(state) { Farms = (byte)(state.Farms + 1) }),
-                new Possibility("buy mine", state.MineCost, new State(state) { Mines = (byte)(state.Mines + 1) }),
-                new Possibility("buy factory", state.FactoryCost, new State(state) { Factories = (byte)(state.Factories + 1) })
+                new Possibility("buy foo", state.FooCost, new State(state) { Foos = (byte)(state.Foos + 1) }),
+                new Possibility("buy bar", state.BarCost, new State(state) { Bars = (byte)(state.Bars + 1) }),
             };
 
-            if (state.ReinforcedIndexFingerAvailable)
+            if (state.FooUpgradeAvailable)
             {
                 possibilities.Add(new Possibility(
-                    "buy reinforced index finger", 
-                    State.COST_REINFORCED_INDEX_FINGER,
-                    new State(state) { ReinforcedIndexFinger = true }));
+                    "buy foo upgrade", 
+                    State.COST_FOO_UPGRADE,
+                    new State(state) { FooUpgrade = true }));
             }
-            if (state.CarpalTunnelPreventionCreamAvailable)
+            if (state.BarUpgradeAvailable)
             {
                 possibilities.Add(new Possibility(
-                    "buy carpal tunnel prevention cream",
-                    State.COST_CARPAL_TUNNEL_PREVENTION_CREAM,
-                    new State(state) { CarpalTunnelPreventionCream = true }));
-            }
-            if (state.AmbidextrousAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy ambidextrous",
-                    State.COST_AMBIDEXTROUS,
-                    new State(state) { Ambidextrous = true }));
-            }
-            if (state.ThousandFingersAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy thousand fingers",
-                    State.COST_THOUSAND_FINGERS,
-                    new State(state) { ThousandFingers = true }));
+                    "buy bar upgrade",
+                    State.COST_BAR_UPGRADE,
+                    new State(state) { BarUpgrade = true }));
             }
 
-            if (state.ForwardsFromGrandmaAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy forwards from grandma",
-                    State.COST_FORWARDS_FROM_GRANDMA,
-                    new State(state) { ForwardsFromGrandma = true }));
-            }
-            if (state.SteelPlatedRollingPinsAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy steel plated rolling pins",
-                    State.COST_STEEL_PLATED_ROLLING_PINS,
-                    new State(state) { SteelPlatedRollingPins = true }));
-            }
-            if (state.LubricatedDenturesAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy lubricated dentures",
-                    State.COST_LUBRICATED_DENTURES,
-                    new State(state) { LubricatedDentures = true }));
-            }
-
-            if (state.CheapHoesAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy cheap hoes",
-                    State.COST_CHEAP_HOES,
-                    new State(state) { CheapHoes = true }));
-            }
-            if (state.FertilizerAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy fertilizer",
-                    State.COST_FERTILIZER,
-                    new State(state) { Fertilizer = true }));
-            }
-            if (state.CookieTreesAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy cookies trees",
-                    State.COST_COOKIE_TREES,
-                    new State(state) { CookieTrees = true }));
-            }
-
-            if (state.SugarGasAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy sugar gas",
-                    State.COST_SUGAR_GAS,
-                    new State(state) { SugarGas = true }));
-            }
-            if (state.MegadrillAvailable)
-            {
-                possibilities.Add(new Possibility(
-                    "buy megadrill",
-                    State.COST_MEGADRILL,
-                    new State(state) { Megadrill = true }));
-            }
-
-            float cps = state.CookiesPerSecond;
+            float production = state.ProductionRate;
             foreach (Possibility possibility in possibilities)
             {
                 if (!this.vertices.TryGetValue(possibility.State, out Vertex to))
@@ -159,10 +83,10 @@ namespace CookieClijkstra
                     this.vertices[possibility.State] = to;
                 }
 
-                yield return new Path(to, possibility.Cost / cps, possibility.Name);
+                yield return new Path(to, possibility.Cost / production, possibility.Name);
             }
 
-            yield return new Path(this.target, (this.TargetCookies - state.CookiesAlreadySpent) / cps, "target");
+            yield return new Path(this.target, (this.TargetDucks - state.AlreadySpent) / production, "target");
         }
 
         public void Step()
@@ -177,19 +101,19 @@ namespace CookieClijkstra
 
             var current = this.queue.Pop();
 
-            if (current.Data == this.target)
+            if (current.Vertex == this.target)
             {
                 this.Solved = true;
                 return;
             }
 
-            foreach (Path neighbor in this.GetNeighborsOf(current.Data))
+            foreach (Path neighbor in this.GetNeighborsOf(current.Vertex))
             {
-                float alt = current.Data.DistanceFromSource + neighbor.Distance;
-                if (alt < neighbor.To.DistanceFromSource)
+                float alt = current.Vertex.MinimumCost + neighbor.Cost;
+                if (alt < neighbor.To.MinimumCost)
                 {
-                    neighbor.To.DistanceFromSource = alt;
-                    neighbor.To.Previous = current.Data;
+                    neighbor.To.MinimumCost = alt;
+                    neighbor.To.Previous = current.Vertex;
                     neighbor.To.PreviousName = neighbor.Name;
                     if (neighbor.To.Node == null)
                     {
@@ -197,7 +121,7 @@ namespace CookieClijkstra
                     }
                     else
                     {
-                        this.queue.DecreaseKey(neighbor.To.Node, alt);
+                        this.queue.DecreaseCost(neighbor.To.Node, alt);
                     }
                 }
             }

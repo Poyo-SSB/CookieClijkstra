@@ -17,24 +17,19 @@ namespace CookieClijkstra
             this.Size = 0;
         }
 
-        public void DecreaseKey(FibonacciHeapNode node, float key)
+        public void DecreaseCost(FibonacciHeapNode node, float key)
         {
-            if (key.CompareTo(node.Key) > 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(key));
-            }
-
-            node.Key = key;
+            node.Cost = key;
 
             FibonacciHeapNode y = node.Parent;
 
-            if ((y != null) && (node.Key.CompareTo(y.Key) < 0))
+            if ((y != null) && (node.Cost < y.Cost))
             {
                 this.Cut(node, y);
                 this.CascadingCut(y);
             }
 
-            if (node.Key.CompareTo(this.Root.Key) < 0)
+            if (node.Cost.CompareTo(this.Root.Cost) < 0)
             {
                 this.Root = node;
             }
@@ -51,7 +46,7 @@ namespace CookieClijkstra
                 this.Root.Right = node;
                 node.Right.Left = node;
 
-                if (node.Key.CompareTo(this.Root.Key) < 0)
+                if (node.Cost < this.Root.Cost)
                 {
                     this.Root = node;
                 }
@@ -169,7 +164,7 @@ namespace CookieClijkstra
                         break;
                     }
 
-                    if (x.Key.CompareTo(y.Key) > 0)
+                    if (x.Cost.CompareTo(y.Cost) > 0)
                     {
                         FibonacciHeapNode temp = y;
                         y = x;
@@ -208,7 +203,7 @@ namespace CookieClijkstra
                     this.Root.Right = y;
                     y.Right.Left = y;
 
-                    if (y.Key.CompareTo(this.Root.Key) < 0)
+                    if (y.Cost < this.Root.Cost)
                     {
                         this.Root = y;
                     }
@@ -275,15 +270,15 @@ namespace CookieClijkstra
 
     public class FibonacciHeapNode
     {
-        public FibonacciHeapNode(Vertex data, float key)
+        public FibonacciHeapNode(Vertex vertex, float cost)
         {
             this.Right = this;
             this.Left = this;
-            this.Data = data;
-            this.Key = key;
+            this.Vertex = vertex;
+            this.Cost = cost;
         }
 
-        public Vertex Data { get; set; }
+        public Vertex Vertex { get; set; }
 
         public FibonacciHeapNode Child { get; set; }
         public FibonacciHeapNode Left { get; set; }
@@ -292,7 +287,7 @@ namespace CookieClijkstra
 
         public bool Marked { get; set; }
 
-        public float Key { get; set; }
+        public float Cost { get; set; }
 
         public int Degree { get; set; }
     }
