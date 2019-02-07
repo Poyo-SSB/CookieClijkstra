@@ -6,11 +6,11 @@ namespace CookieClijkstra
     {
         public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
 
-        private const int target_ducks = 1000;
+        private const int target_cookies = 1000;
 
         public static async Task MainAsync(string[] args)
         {
-            var graph = new Graph(target_ducks);
+            var graph = new Graph(target_cookies);
 
             var stopwatch = new System.Diagnostics.Stopwatch();
 

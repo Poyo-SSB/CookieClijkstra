@@ -18,7 +18,7 @@ namespace CookieClijkstra
             }
         }
 
-        public int TargetDucks { get; }
+        public int TargetCookies { get; }
 
         public readonly Vertex target;
 
@@ -29,9 +29,9 @@ namespace CookieClijkstra
         public bool Solved { get; private set; }
         public int StepCount { get; private set; }
 
-        public Graph(int targetDucks)
+        public Graph(int targetCookies)
         {
-            this.TargetDucks = targetDucks;
+            this.TargetCookies = targetCookies;
 
             this.queue = new FibonacciHeap();
 
@@ -86,7 +86,7 @@ namespace CookieClijkstra
                 yield return new Path(to, possibility.Cost / production, possibility.Name);
             }
 
-            yield return new Path(this.target, (this.TargetDucks - state.AlreadySpent) / production, "target");
+            yield return new Path(this.target, (this.TargetCookies - state.AlreadySpent) / production, "target");
         }
 
         public void Step()

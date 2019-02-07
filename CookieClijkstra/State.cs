@@ -51,17 +51,17 @@ namespace CookieClijkstra
                 int fooCost = Sum(cost_foo, this.Foos);
                 int barCost = Sum(cost_bar, this.Bars);
 
-                int totalDucks = fooCost + barCost;
+                int totalCookies = fooCost + barCost;
 
-                totalDucks += this.FooUpgrade ? COST_FOO_UPGRADE : 0;
-                totalDucks += this.BarUpgrade ? COST_BAR_UPGRADE : 0;
+                totalCookies += this.FooUpgrade ? COST_FOO_UPGRADE : 0;
+                totalCookies += this.BarUpgrade ? COST_BAR_UPGRADE : 0;
 
-                return totalDucks;
+                return totalCookies;
             }
         }
 
         private static int Cost(float baseCost, int ownedCount)
-            =>(int)Math.Ceiling(baseCost * Math.Pow(1.15, ownedCount));
+            => (int)Math.Ceiling(baseCost * Math.Pow(1.15, ownedCount));
 
         private static int Sum(float baseCost, int count)
         {
